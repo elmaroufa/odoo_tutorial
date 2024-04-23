@@ -1,0 +1,45 @@
+version: '3.1'
+services:
+  web:
+    container_name: odoo17
+    image: odoo:17.0
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo17-src-data:/var/lib/odoo
+      - ./conf/odoo.conf:/etc/odoo/odoo.conf
+      - ./modules/external-addons:/mnt/external-addons
+     
+    env_file: .env
+    
+  db:
+    container_name: postgres
+    image: postgres:15
+    env_file: .env
+    ports:
+      - "5542:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/pgdata
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:6.18
+    depends_on:
+      - db
+    environment:
+      PGADMIN_DEFAULT_EMAIL: db@abbo.cm
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8099:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    links:
+      - "db:psql-odoo-server"
+
+volumes:
+  odoo17-data:
+  postgres-data:
+  pgadmin-data:
