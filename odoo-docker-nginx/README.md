@@ -10,13 +10,14 @@ the folder nginx content odoo.conf for ngnix
    sudo nano /etc/nginx/sites-available/odoo.conf
   ```
   
-- Edit file (odoo.conf) using link documentation
+- Edit file (odoo.conf) using link documentation or see folder nginx/odoo.conf
   
    ```
   https://www.odoo.com/documentation/17.0/administration/on_premise/deploy.html
   ```
+   ## NB: Attention, in the documentation, the odoo.conf configuration file is presented in the "/etc/nginx/sites-enabled/odoo.conf" directory. It is preferable to create it in "site-available" and create a symbolic link.
    
-- Enable the Nginx Configuration by Creating a Symbolic Link in the "/etc/nginx/sites-enabled" Directory:
+- Enable the Nginx Configuration by Creating a Symbolic Link in the "/etc/nginx/sites-enabled" 
   
    ```
    sudo ln -s /etc/nginx/sites-available/odoo.conf /etc/nginx/sites-enabled/
@@ -34,4 +35,28 @@ the folder nginx content odoo.conf for ngnix
 
   ```
   
-- 
+  ## Star odoo server and using bash
+
+  - stard odoo using docker compose
+    
+     ```
+     docker compose up -d
+     ```
+     
+  - Using odoo-bin in container:
+
+     ```
+     docker exec -it <container_name>  bash
+     ```
+  - Update database and module
+
+    ```
+    odoo --addons-path=/mnt/addons -d <dbname> -u <module> 
+    ```
+  
+  - Run unit tests on Docker
+   
+    ```
+    odoo --addons-path=/mnt/addons -d <dbname> -u <module> --log-level=test --test-enable --stop-after-init
+    ```
+  
